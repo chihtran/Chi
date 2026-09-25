@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ha-Chi Tran</title>
+<meta name="description" content="Ha-Chi Tran — mathematics, decision theory, and AI governance.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%231E4D3B'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Tokens: pure white, pure black, one deep green ---------- */
+  :root {
+    --paper: #FFFFFF; color-scheme: light only;
+    --ink: #000000;
+    --ink-2: #000000;
+    --metal: #000000;
+    --rule: #1E4D3B;
+    --accent: #1E4D3B;       /* xanh lá đậm */
+    --accent-deep: #1E4D3B;
+    --accent-soft: #FFFFFF;
+
+    --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    --sans: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+
+    --measure: 38rem;
+    --wide: 60rem;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; background: #FFFFFF; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+
+  body {
+    margin: 0;
+    background: #FFFFFF;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 1.1875rem;
+    line-height: 1.6;
+    font-optical-sizing: auto;
+  }
+
+  a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+  a:hover { color: var(--accent-deep); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  .wrap { max-width: var(--wide); margin: 0 auto; padding: 0 1.5rem; }
+
+  /* ---------- Top bar ---------- */
+  header.top {
+    display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .75rem 1.5rem;
+    padding: 1.5rem 0; font-family: var(--sans); font-size: .9rem;
+  }
+  header.top .mark { font-family: var(--serif); font-size: 1.1rem; font-weight: 500; text-decoration: none; }
+  header.top nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+  header.top nav a { text-decoration: none; color: var(--ink-2); }
+  header.top nav a:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--accent); }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 3.5rem 0 2.5rem; }
+  .hero h1 {
+    font-weight: 400; font-size: clamp(2.4rem, 5.5vw, 3.6rem); line-height: 1.05; letter-spacing: -.02em;
+    margin: 0 0 1.25rem;
+  }
+  .hero h1 .alt { display: block; font-weight: 400; color: var(--metal); font-size: 1.2rem; letter-spacing: 0; margin-top: .5rem; }
+  .hero .lede { font-size: clamp(1.05rem, 1.6vw, 1.2rem); line-height: 1.45; margin: 0; color: var(--ink-2); }
+  @media (min-width: 900px) { .hero .lede { white-space: nowrap; } }
+
+  /* The journey line: the one memorable element (vertical on all screens) */
+  .journey { margin: 3.5rem 0 0; }
+  .journey ol {
+    list-style: none; margin: 0; padding: 0 0 0 2.25rem;
+    display: grid; gap: 1.6rem; position: relative; max-width: var(--measure);
+  }
+  .journey ol::before {
+    content: ""; position: absolute; left: 7px; top: .5rem; bottom: .5rem; width: 2px;
+    background: linear-gradient(to bottom, var(--accent) 0 var(--p, 0%), var(--rule) var(--p, 0%) 100%);
+    transition: --p 1s;
+  }
+  .journey li { position: relative; }
+  .journey li::before {
+    content: ""; position: absolute; left: -2.25rem; top: .4rem; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--paper); border: 2px solid var(--accent);
+  }
+  .journey li.here::before { background: var(--accent); }
+  .journey .city { font-size: 1.35rem; display: block; line-height: 1.2; }
+  .journey .what { font-family: var(--sans); font-size: .85rem; color: var(--ink-2); display: block; margin-top: .3rem; line-height: 1.4; }
+  .journey .yrs { font-family: var(--sans); font-size: .85rem; color: var(--accent-deep); font-variant-numeric: tabular-nums; display: block; margin-top: .15rem; }
+
+  @property --p { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+  .journey.drawn ol::before { --p: 100%; }
+
+  /* ---------- Sections ---------- */
+  section.block { border-top: 1px solid var(--rule); padding: 3.5rem 0; display: grid; grid-template-columns: 12rem 1fr; gap: 1rem 3rem; }
+  section.block > h2 {
+    font-family: var(--sans); font-weight: 600; font-size: 1rem; margin: .35rem 0 0; color: var(--ink);
+  }
+  section.block > .body { max-width: var(--measure); }
+  section.block p { margin: 0 0 1.1em; }
+  @media (max-width: 760px) { section.block { grid-template-columns: 1fr; padding: 2.75rem 0; } }
+
+  .feature {
+    background: #FFFFFF; border: 1.5px solid var(--accent); border-top-width: 6px;
+    padding: 1.5rem 1.75rem 1.6rem; margin: 0 0 2.5rem;
+  }
+  .feature .kicker { font-family: var(--sans); font-size: .85rem; font-weight: 600; color: var(--accent); margin: 0 0 .5rem; }
+  .feature h3 { font-weight: 500; font-size: 1.55rem; line-height: 1.25; margin: 0 0 .75rem; color: #000000; }
+  .feature p { font-size: 1.05rem; margin: 0; color: var(--ink-2); }
+
+  ul.works { list-style: none; margin: 0; padding: 0; }
+  ul.works li { padding: 0 0 1.35rem; }
+  ul.works .t { display: block; font-size: 1.15rem; line-height: 1.35; }
+  ul.works .v { display: block; font-family: var(--sans); font-size: .85rem; color: var(--ink-2); margin-top: .3rem; line-height: 1.45; }
+  ul.works .v a { color: var(--ink-2); }
+
+  h3.sub { font-family: var(--sans); font-weight: 600; font-size: .9rem; color: #000000; margin: 2.25rem 0 1rem; }
+  h3.sub:first-child { margin-top: 0; }
+
+  /* Work timeline — a real sequence, so dates lead */
+  dl.cv { margin: 0; display: grid; grid-template-columns: 7.5rem 1fr; gap: 0 1.5rem; }
+  dl.cv dt { font-family: var(--sans); font-size: .85rem; color: var(--accent-deep); padding-top: .3rem; font-variant-numeric: tabular-nums; }
+  dl.cv dd { margin: 0 0 1.6rem; }
+  dl.cv dd strong { font-weight: 500; display: block; font-size: 1.15rem; line-height: 1.3; }
+  dl.cv dd .org { font-family: var(--sans); font-size: .88rem; color: var(--ink-2); display: block; margin: .15rem 0 .45rem; }
+  dl.cv dd p { font-size: 1.02rem; margin: 0; color: var(--ink-2); }
+  @media (max-width: 520px) { dl.cv { grid-template-columns: 1fr; } dl.cv dt { padding-top: 0; } }
+
+  .talks { list-style: none; margin: 0; padding: 0; }
+  .talks li { display: grid; grid-template-columns: 3.5rem 1fr; gap: 1rem; padding: 0 0 1.25rem; font-size: 1.02rem; line-height: 1.45; }
+  .talks .y { font-family: var(--sans); font-size: .85rem; color: var(--accent-deep); padding-top: .15rem; }
+  .talks .ttl { display: block; }
+  .talks .where { display: block; color: var(--metal); font-size: .95rem; margin-top: .15rem; }
+
+  .contact-links { font-family: var(--sans); font-size: .95rem; display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; margin-top: 1.5rem; }
+
+  footer { border-top: 1px solid var(--rule); padding: 2rem 0 3rem; font-family: var(--sans); font-size: .82rem; color: var(--metal); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="mark" href="#">Ha-Chi Tran</a>
+    <nav aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#talks">Talks</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Ha-Chi Tran <span class="alt">Trần Hà Chi · also Chi</span></h1>
+      <p class="lede">I use the tools of law and economics to study how states govern the risks of frontier technologies.</p>
+
+      <div class="journey" id="journey" aria-label="Where I have lived and studied">
+        <ol>
+          <li class="here"><span class="city">London</span><span class="what">MSc Mathematics &amp; Computation, LSE</span><span class="yrs">2025–2026</span></li>
+          <li><span class="city">Hanoi</span><span class="what">Viettel Big Data Analytics Center &amp; IPS</span><span class="yrs">2023–2025</span></li>
+          <li><span class="city">Moorhead, MN</span><span class="what">B.A. Mathematics &amp; Political Science, Concordia College</span><span class="yrs">2019–2022</span></li>
+          <li><span class="city">Hanoi</span><span class="what">Where I grew up</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="block" id="about">
+      <h2>About</h2>
+      <div class="body">
+        <p>I trained in mathematics and political science. My work sits in the economic analysis of law, applied to the international problem of who pays when technology fails at scale.</p>
+        <p>When I'm not at my desk, I get my hands dirty with ceramics.</p>
+      </div>
+    </section>
+
+    <section class="block" id="research">
+      <h2>Research</h2>
+      <div class="body">
+        <div class="feature">
+          <p class="kicker">MSc dissertation, LSE · supervised by Prof. Olivier Gossner</p>
+          <h3>Robust Paternalism under Uncertainty: Loss Aversion, Preference-Preserving Dominance, and the Fragility of Centrism</h3>
+          <p>When can a designer adjust a platform under deep uncertainty without losing any voter who preferred it to the opponent? With loss-averse voters, the answer explains why centrism is fragile.</p>
+        </div>
+
+        <h3 class="sub">Peer-reviewed</h3>
+        <ul class="works">
+          <li>
+            <span class="t">Brokerage in the Black Box: Swing States, Strategic Ambiguity, and the Global Politics of AI Governance</span>
+            <span class="v">Second International Association for Safe and Ethical AI Conference (IASEAI), UNESCO House, Paris, 2026 · <a href="https://arxiv.org/abs/2601.06412">Preprint</a></span>
+          </li>
+          <li>
+            <span class="t">Who Foots the Bill? State-Backed No-Fault Compensation for Experimental Harms in AI Regulatory Sandboxes</span>
+            <span class="v">Eighth AAAI/ACM Conference on Artificial Intelligence, Ethics, and Society (AIES-25), Madrid, 2025, 8(3): 2508–2521 · <a href="https://doi.org/10.1609/aies.v8i3.36734">DOI</a></span>
+          </li>
+        </ul>
+
+        <h3 class="sub">Reports and shorter pieces</h3>
+        <ul class="works">
+          <li>
+            <span class="t">Bridging Liability Gaps in the Age of AI: The Case for No-Fault Compensation Schemes</span>
+            <span class="v">Extended abstract, Eighth AAAI/ACM Conference on Artificial Intelligence, Ethics, and Society (AIES-25), Madrid, 2025, 8(3): 2930–2932 · <a href="https://doi.org/10.1609/aies.v8i3.36797">DOI</a></span>
+          </li>
+          <li>
+            <span class="t">Country Report: Viet Nam</span>
+            <span class="v">Asia-Europe Science &amp; Technology Diplomacy Report, Asia-Europe Foundation, 2025</span>
+          </li>
+          <li>
+            <span class="t">The SolarWinds Attack and Its Lessons</span>
+            <span class="v">E-International Relations, 2021</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block" id="talks">
+      <h2>Featured talks</h2>
+      <div class="body">
+        <ul class="talks">
+          <li><span class="y">2026</span><span><span class="ttl">Brokerage in the Black Box</span><span class="where">Second International Association for Safe and Ethical AI Conference (IASEAI), UNESCO House, Paris</span></span></li>
+          <li><span class="y">2025</span><span><span class="ttl">Who Foots the Bill?</span><span class="where">Eighth AAAI/ACM Conference on Artificial Intelligence, Ethics, and Society (AIES), Madrid</span></span></li>
+          <li><span class="y">2024</span><span><span class="ttl">Vietnam Science, Technology and Innovation Diplomacy</span><span class="where">World Science Forum 2024, Budapest</span></span></li>
+          <li><span class="y">2021</span><span><span class="ttl">The Hiring Problem: Modifications and Win Strategies</span><span class="where">Mathematical Association of America, North Central Section</span></span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block" id="work">
+      <h2>Work</h2>
+      <div class="body">
+        <dl class="cv">
+          <dt>2024–2025</dt>
+          <dd>
+            <strong>Technology Policy Researcher</strong>
+            <span class="org">Institute for Policy Studies and Media Development, Hanoi</span>
+          </dd>
+          <dt>2024–2025</dt>
+          <dd>
+            <strong>Country Informant</strong>
+            <span class="org">Asia-Europe Foundation, Singapore</span>
+          </dd>
+          <dt>2023–2024</dt>
+          <dd>
+            <strong>Data Analyst</strong>
+            <span class="org">Big Data Analytics Center, Viettel, Hanoi</span>
+          </dd>
+        </dl>
+      </div>
+    </section>
+
+    <section class="block" id="contact">
+      <h2>Contact</h2>
+      <div class="body">
+        <p>I'm happy to hear from people working on AI governance, decision theory, or policy in Southeast Asia. Email is the best way to reach me.</p>
+        <div class="contact-links">
+          <a href="mailto:chih.tran1@gmail.com">chih.tran1@gmail.com</a>
+          <a href="https://www.linkedin.com/in/chihtran/">LinkedIn</a>
+          <a href="https://scholar.google.com/citations?user=aIPbU9cAAAAJ&amp;hl=en">Google Scholar</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>© 2026 Ha-Chi Tran. Written in Hanoi and London.</footer>
+</div>
+
+<script>
+  // One orchestrated moment: the journey line draws in once on load.
+  requestAnimationFrame(() => setTimeout(() => document.getElementById('journey').classList.add('drawn'), 200));
+</script>
+</body>
+</html>
